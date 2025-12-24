@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python in JS</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    
+    <section class="top-level flex">
+        <header class="game-info flex">
+            <div class="game-score flex">
+                <div class="info-box" id="high-score">
+                    <h3>High Score:</h3>
+                    <span>0</span>
+                </div>
+                <div class="info-box" id="crr-score">
+                    <h3>Score:</h3>
+                    <span>0</span>
+                </div>
+                <div class="info-box" id="game-time">
+                    <h3>Tine:</h3>
+                    <span>00-00</span>
+                </div> 
+            </div>
+        </header>
+
+        <main class="game-board flex">
+            
+        </main>
+    </section>
+    
+
+    <section class="overlay start-overlay">
+        <div class="overlay-text">
+            Welcome to Python in JS, a Snake and Food Game
+        </div>
+        <button class="btn start-btn">Start Game</button>
+    </section>
+
+    <section class="overlay game-over-overlay">
+        <div class="overlay-text">
+            GAME OVER!
+        </div>
+        <button class="btn restart-btn">Resart Game</button>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
