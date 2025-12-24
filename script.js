@@ -1,1 +1,128 @@
-const gameBoard = document.getElementsByClassName("game-board")[0]
+const gameBoard = document.querySelector(".game-board")
+const blockWidth = 40
+const blockHeght = 40
+const blocks = [];
+const snake = [
+    {x:3, y:3}, {x:3, y:4}, {x:3, y:5}
+]
+let direction = "ArrowRight"
+let foodBlock = {x:0, y:0}
+
+let cols = Math.floor(gameBoard.clientWidth / blockWidth)
+let rows = Math.floor(gameBoard.clientHeight / blockHeght)
+
+function calRCAgain() {
+    cols = Math.floor(gameBoard.clientWidth / blockWidth)
+    rows = Math.floor(gameBoard.clientHeight / blockHeght)
+}
+
+function renderBlocks() {
+    gameBoard.innerHTML = ""
+    calRCAgain();
+    for (let i=0; i < rows; i++) {
+        for (let j=0; j < cols; j++) {
+            const block = document.createElement("div")
+            block.classList.add("block")
+            blocks[`${i}, ${j}`] = block
+            gameBoard.appendChild(block)
+        }
+    }
+
+}
+
+function renderFood() {
+    let foodRow = Math.floor(Math.random() * rows)
+    let foodCol = Math.floor(Math.random() * cols)
+    food = {x: foodRow, y: foodCol}
+    foodBlock = blocks[`${foodRow}, ${foodCol}`]
+    foodBlock.classList.add("food-block")
+    console.log("Food:", foodRow, foodCol, foodBlock)
+}
+
+function renderSnake() {
+    let snakeRow
+    let snakeCol
+    snake.forEach((segment) => {
+        snakeRow = segment.x
+        snakeCol = segment.y
+        blocks[`${snakeRow}, ${snakeCol}`].classList.add("snake-block")
+    })
+}
+
+renderBlocks()
+renderSnake()
+renderFood()
+
+const renderInterval = setInterval(() => {
+    
+    let head = null
+
+    if (direction === "ArrowRight") {
+        head = {
+            x: snake[0].x,
+            y: snake[0].y + 1
+        }
+        // snake.push(head)
+    }
+    else if (direction === "ArrowLeft") {
+        head = {
+            x: snake[0].x, 
+            y: snake[0].y - 1
+        }
+        // snake.unshift(head)
+    }
+    else if (direction === "ArrowUp") {
+        head = {
+            x: snake[0].x - 1, 
+            y: snake[0].y
+        }
+        // snake.unshift(head)
+    }
+    else if (direction === "ArrowDown") {
+        head = {
+            x: snake[0].x + 1, 
+            y: snake[0].y
+        }
+        // snake.unshift(head)
+    } 
+
+    if (head.x < 0 || head.y < 0 || head.x >= rows || head.y >= cols) {
+        console.log("Game Over")
+        snake.forEach((segment) => {
+            let snakeRow = segment.x
+            let snakeCol = segment.y
+            blocks[`${snakeRow}, ${snakeCol}`].classList.add("dead-snake")
+        })
+        clearInterval(renderInterval)
+    } else {
+        snake.forEach(segment => {
+            blocks[`${segment.x}, ${segment.y}`].classList.remove("snake-block")
+        })
+        
+        snake.unshift(head)
+        snake.pop()
+
+        if (head.x == food.x && head.y == food.y) {
+            console.log(food.x, food.y)
+            snake.unshift(head)
+            foodBlock.classList.remove("food-block")
+            renderFood()
+        }
+        
+        renderSnake()
+    }
+    
+    
+}, 300);
+
+
+window.addEventListener("resize", () => {
+    renderBlocks();
+})
+
+document.addEventListener("keydown", (e) => {
+    if (e.key ===  "ArrowUp" || e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        direction = e.key
+    }
+    console.log(direction)
+})
