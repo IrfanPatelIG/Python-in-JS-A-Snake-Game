@@ -2,19 +2,20 @@ const startOverlay = document.querySelector(".start-overlay")
 const gameOverOverlay = document.querySelector(".game-over-overlay")
 const startBtn = document.querySelector(".start-btn")
 const restartBtn = document.querySelector(".restart-btn")
-const gameBoard = document.querySelector(".game-board")
 const gameOverMsgDiv = document.querySelector(".game-over-msg")
+const gameBoard = document.querySelector(".game-board")
+const crrScoreDiv = document.querySelector("#crr-score")
+const highScoreDiv = document.querySelector("#high-score")
 
 const blockWidth = 40
 const blockHeght = 40
 const blocks = [];
-
 let snake = [
     {x:3, y:3}, {x:3, y:4}, {x:3, y:5}
 ]
 
 let direction = "ArrowRight"
-let foodBlock = {x:0, y:0}
+let foodBlock = {x:3, y:7}
 let score = 0, highScore = 0
 let snakeBodyTouch = false
 let gameOverMsg
@@ -51,7 +52,7 @@ function renderFood() {
     food = {x: foodRow, y: foodCol}
     foodBlock = blocks[`${foodRow}, ${foodCol}`]
     foodBlock.classList.add("food-block")
-    console.log("Food:", foodRow, foodCol, foodBlock)
+    // console.log("Food:", foodRow, foodCol, foodBlock)
 }
 
 function renderSnake() {
@@ -64,11 +65,32 @@ function renderSnake() {
     })
 }
 
+function gameOverSnakeColor() {
+    snake.forEach((segment) => {
+        let snakeRow = segment.x
+        let snakeCol = segment.y
+        blocks[`${snakeRow}, ${snakeCol}`].classList.add("dead-snake")
+    })
+    clearInterval(renderInterval)
+    gameOverOverlay.classList.add("game-over-overlay-display")
+}
+
+function initializeGame() {
+    renderBlocks()
+    renderSnake()
+    renderFood()
+    if (!localStorage.key("HighScore")) {
+        localStorage.setItem("HighScore", highScore)
+    }
+    else {
+        highScore = localStorage.getItem("HighScore")
+    }
+    highScoreDiv.innerHTML = highScore
+}
+
 // **** GAME Rendering Starts Here ****
 
-renderBlocks()
-renderSnake()
-renderFood()
+initializeGame()
 
 function renderGame() {
     let head = null
@@ -102,42 +124,43 @@ function renderGame() {
         // snake.unshift(head)
     }
 
+
     // Checking for GAME OVER
-    if (snake.length > 3) {
+    if (snake.length >= 4) {
         for (let i=0; i<snake.length; i++) {
             if (head.x == snake[i].x && head.y == snake[i].y) {
                 snakeBodyTouch = true;
                 gameOverMsg = "You Touched Yourself!"
-                gameOverMsgDiv.innerHTML = gameOverMsg
             }
         }
     }
 
+    // Crossing the Border
     if (head.x < 0 || head.y < 0 || head.x >= rows || head.y >= cols) {
+        if (score > highScore) {
+            localStorage.setItem("HighScore", score)
+        }
+        score = 0
         console.log("Game Over")
-        gameOverMsg = "You Crossed the Game Border!"
+        gameOverMsg = "You Tried to Cross the Game Border!"
         gameOverMsgDiv.innerHTML = gameOverMsg
-        snake.forEach((segment) => {
-            let snakeRow = segment.x
-            let snakeCol = segment.y
-            blocks[`${snakeRow}, ${snakeCol}`].classList.add("dead-snake")
-        })
-        clearInterval(renderInterval)
-        gameOverOverlay.classList.add("game-over-overlay-display")
+        gameOverSnakeColor()
         return;
     }
+    // Eating self
     else if (snakeBodyTouch) {
+        if (score > highScore) {
+            localStorage.setItem("HighScore", score)
+        }
+        snakeBodyTouch = false
+        score = 0
         console.log("Game Over")
-        snake.forEach((segment) => {
-            let snakeRow = segment.x
-            let snakeCol = segment.y
-            blocks[`${snakeRow}, ${snakeCol}`].classList.add("dead-snake")
-        })
+        gameOverMsgDiv.innerHTML = gameOverMsg
+        gameOverSnakeColor()
         blocks[`${head.x}, ${head.y}`].classList.remove("dead-snake")
-        clearInterval(renderInterval)
-        gameOverOverlay.classList.add("game-over-overlay-display")
         return;
     }
+    // All clear
     else {
         snake.forEach(segment => {
             blocks[`${segment.x}, ${segment.y}`].classList.remove("snake-block")
@@ -148,8 +171,10 @@ function renderGame() {
 
         if (head.x == food.x && head.y == food.y) {
             score += 10
-            console.log(food.x, food.y)
-            console.log("Score:", score)
+            crrScoreDiv.innerHTML = score
+            if (score > highScore) {
+                highScoreDiv.innerHTML = score
+            }
             snake.unshift(head)
             foodBlock.classList.remove("food-block")
             renderFood()
@@ -160,7 +185,15 @@ function renderGame() {
 }
 
 
+
+// ***Event Listeners***
+
 startBtn.addEventListener("click", function(e) {
+    if (localStorage.getItem("HighScore")) {
+        highScore = localStorage.getItem("HighScore")
+    }
+    highScoreDiv.innerHTML = highScore
+
     startOverlay.classList.remove("start-overlay-display")
     renderInterval = setInterval(() => {
         renderGame()
@@ -168,6 +201,12 @@ startBtn.addEventListener("click", function(e) {
 })
 
 restartBtn.addEventListener("click", function(e) {
+    if (localStorage.getItem("HighScore")) {
+        highScore = localStorage.getItem("HighScore")
+    }
+    highScoreDiv.innerHTML = highScore
+
+    crrScoreDiv.innerHTML = score
     direction = "ArrowRight"
     snake.forEach(seg => {
         blocks[`${seg.x}, ${seg.y}`].classList.remove("snake-block")
@@ -183,12 +222,12 @@ restartBtn.addEventListener("click", function(e) {
 })
 
 window.addEventListener("resize", () => {
-    renderBlocks();
+    renderBlocks()
+    renderFood()
 })
 
 document.addEventListener("keydown", (e) => {
     if (e.key ===  "ArrowUp" || e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === "ArrowLeft") {
         direction = e.key
     }
-    console.log(direction)
 })

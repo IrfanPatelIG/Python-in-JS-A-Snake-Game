@@ -81,7 +81,7 @@ header.game-info {
 
 .game-score {
     width: 100%;
-    justify-content: space-between;
+    justify-content: space-around;
     gap: var(--gap-16);
 }
 
@@ -116,6 +116,13 @@ header.game-info {
 
 .snake-block {
     background-color: var(--bg-fill-snake);
+}
+
+.snake-head-block {
+    background-image: url("assets/SnakeHead.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .dead-snake {
