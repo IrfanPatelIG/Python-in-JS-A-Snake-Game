@@ -100,28 +100,24 @@ function renderGame() {
             x: snake[0].x,
             y: snake[0].y + 1
         }
-        // snake.push(head)
     }
     else if (direction === "ArrowLeft") {
         head = {
             x: snake[0].x, 
             y: snake[0].y - 1
         }
-        // snake.unshift(head)
     }
     else if (direction === "ArrowUp") {
         head = {
             x: snake[0].x - 1, 
             y: snake[0].y
         }
-        // snake.unshift(head)
     }
     else if (direction === "ArrowDown") {
         head = {
             x: snake[0].x + 1, 
             y: snake[0].y
         }
-        // snake.unshift(head)
     }
 
 
@@ -188,24 +184,27 @@ function renderGame() {
 
 // ***Event Listeners***
 
-startBtn.addEventListener("click", function(e) {
+let renderInterval
+
+function startBtnEvent() {
     if (localStorage.getItem("HighScore")) {
         highScore = localStorage.getItem("HighScore")
     }
     highScoreDiv.innerHTML = highScore
 
     startOverlay.classList.remove("start-overlay-display")
+    clearInterval(renderInterval)
     renderInterval = setInterval(() => {
         renderGame()
     }, 300);
-})
+}
 
-restartBtn.addEventListener("click", function(e) {
+function restartBtnEvent() {
     if (localStorage.getItem("HighScore")) {
         highScore = localStorage.getItem("HighScore")
     }
     highScoreDiv.innerHTML = highScore
-
+    
     crrScoreDiv.innerHTML = score
     direction = "ArrowRight"
     snake.forEach(seg => {
@@ -216,18 +215,42 @@ restartBtn.addEventListener("click", function(e) {
     foodBlock.classList.remove("food-block")
     renderFood()
     gameOverOverlay.classList.remove("game-over-overlay-display")
+    clearInterval(renderInterval)
     renderInterval = setInterval(() => {
         renderGame()
     }, 300);
-})
+}
+
+startBtn.addEventListener("click", startBtnEvent)
+
+restartBtn.addEventListener("click", restartBtnEvent)
 
 window.addEventListener("resize", () => {
     renderBlocks()
     renderFood()
 })
 
+const opposites = {
+    ArrowUp : "ArrowDown",
+    ArrowDown : "ArrowUp",
+    ArrowRight : "ArrowLeft",
+    ArrowLeft : "ArrowRight"
+}
+let AllowedKeys = ["ArrowUp", "ArrowDown", "ArrowRight", "ArrowLeft"]
+
 document.addEventListener("keydown", (e) => {
-    if (e.key ===  "ArrowUp" || e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === "ArrowLeft") {
-        direction = e.key
+    if (AllowedKeys.includes(e.key)) {
+        e.preventDefault()
+        if (opposites[direction] !== e.key) {
+            direction = e.key
+        }
+    }
+
+    if (e.key === "Enter") {
+        if (startOverlay.classList.contains("start-overlay-display")) {
+            startBtnEvent()
+        } else if (gameOverOverlay.classList.contains("game-over-overlay-display")) {
+            restartBtnEvent()
+        }
     }
 })
