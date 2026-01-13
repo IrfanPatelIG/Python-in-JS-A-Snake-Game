@@ -6,6 +6,7 @@ const gameOverMsgDiv = document.querySelector(".game-over-msg")
 const gameBoard = document.querySelector(".game-board")
 const crrScoreDiv = document.querySelector("#crr-score")
 const highScoreDiv = document.querySelector("#high-score")
+const modeSwitchBtn = document.querySelector("#mode-switch-btn")
 
 const blockWidth = 40
 const blockHeght = 40
@@ -92,7 +93,8 @@ function initializeGame() {
 
 initializeGame()
 
-function renderGame() {
+function renderGame(check=1) {
+    if (check != 1) return
     let head = null
 
     if (direction === "ArrowRight") {
@@ -195,7 +197,7 @@ function startBtnEvent() {
     startOverlay.classList.remove("start-overlay-display")
     clearInterval(renderInterval)
     renderInterval = setInterval(() => {
-        renderGame()
+        renderGame(0)
     }, 300);
 }
 
@@ -228,6 +230,16 @@ restartBtn.addEventListener("click", restartBtnEvent)
 window.addEventListener("resize", () => {
     renderBlocks()
     renderFood()
+})
+
+modeSwitchBtn.addEventListener("click", () => {
+    const isLight = document.body.classList.toggle("light-mode")
+    modeSwitchBtn.innerHTML = isLight ? "Dark Mode" : "Light Mode"
+    if (modeSwitchBtn.innerHTML == "Dark Mode") {
+        modeSwitchBtn.classList.add("btn-light-mode")
+    } else {
+        modeSwitchBtn.classList.remove("btn-light-mode")
+    }
 })
 
 const opposites = {

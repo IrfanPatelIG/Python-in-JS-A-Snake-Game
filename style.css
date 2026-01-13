@@ -5,29 +5,34 @@
 }
 
 :root {
-        --bg-primary: #0d0d0d;
-
-    --bg-fill-food: #61ef33;
-    --bg-fill-snake: #22dffb;
-    --bg-fill-dead-snake: #c01111;
+    /* Dark Mode */
+    --bg-primary-dark: #0d0d0d;
     
-    --text-primary: #eeeeee;
-    --text-accent-color: #011e22d5;
-    --text-accent-red-color: #055d9cd5;
+    --bg-fill-food-dark: #61ef33;
+    --bg-fill-snake-dark: #22dffb;
+    --bg-fill-dead-snake-dark: #c01111;
     
-    --br-primary-color: #333333;
-    --br-dead-color: #02cbc7;
+    --text-primary-dark: #eeeeee;
+    --text-accent-color-dark: #011e22d5;
+    --text-accent-red-color-dark: #055d9cd5;
+    
+    --br-primary-color-dark: #333333;
+    --br-dead-color-dark: #02cbc7;
+    
+    
+    /* Light Mode */
+    --bg-primary-light: #e3e3e3;
 
-
-    /* --bg-primary: #cee6bd;
-    --bg-fill-food: #9e1218;
-    --bg-fill-snake: #4eb617;
-    --bg-fill-dead-snake: #c62e2e;
-    --text-primary: #010101;
-    --text-accent-color: #83a386d5;
-    --text-accent-red-color: #0a5908d5;
-    --br-primary-color: #807878cf;
-    --br-dead-color: #99070f; */
+    --bg-fill-food-light: #cf1919;
+    --bg-fill-snake-light: #176830;
+    --bg-fill-dead-snake-light: #7c1515;
+    
+    --text-primary-light: #090909;
+    --text-accent-color-light: #011e22d5;
+    --text-accent-red-color-light: #055d9cd5;
+    
+    --br-primary-color-light: #ada9a9;
+    --br-dead-color-light: #c6bbbb;
 
 
     --pd-44: 44px;
@@ -42,6 +47,20 @@
 }
 
 body {
+    /* default = dark theme */
+    --bg-primary: var(--bg-primary-dark);
+
+    --bg-fill-food: var(--bg-fill-food-dark);
+    --bg-fill-snake: var(--bg-fill-snake-dark);
+    --bg-fill-dead-snake: var(--bg-fill-dead-snake-dark);
+
+    --text-primary: var(--text-primary-dark);
+    --text-accent-color: var(--text-accent-color-dark);
+    --text-accent-red-color: var(--text-accent-red-color-dark);
+
+    --br-primary-color: var(--br-primary-color-dark);
+    --br-dead-color: var(--br-dead-color-dark);
+
     width: 100vw;
     height: 100vh;
     color: var(--text-primary);
@@ -49,6 +68,26 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: 400;
 }
+
+
+body.light-mode {
+    --bg-primary: var(--bg-primary-light);
+
+    --bg-fill-food: var(--bg-fill-food-light);
+    --bg-fill-snake: var(--bg-fill-snake-light);
+    --bg-fill-dead-snake: var(--bg-fill-dead-snake-light);
+
+    --text-primary: var(--text-primary-light);
+    --text-accent-color: var(--text-accent-color-light);
+    --text-accent-red-color: var(--text-accent-red-color-light);
+
+    --br-primary-color: var(--br-primary-color-light);
+    --br-dead-color: var(--br-dead-color-light);
+    
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+}
+
 
 
 .check {
@@ -74,6 +113,10 @@ body {
     transform: scale(1.02);
     cursor: pointer;
 }
+.btn-light-mode {
+    background-color: var(--bg-primary-dark);
+    color: var(--text-primary-dark);
+}
 
 .top-level {
     width: 100%;
@@ -88,6 +131,18 @@ body {
 header.game-info {
     width: 100%;
     justify-content: space-between;
+    /* flex-direction: column-reverse; */
+    align-items: flex-end;
+}
+
+.mode-switch {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+.mode-switch > .btn.light-mode {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 .game-score {
