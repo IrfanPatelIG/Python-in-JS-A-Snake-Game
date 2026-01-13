@@ -58,20 +58,26 @@ function renderFood() {
 }
 
 function renderSnake() {
-    let snakeRow
-    let snakeCol
-    snake.forEach((segment) => {
-        snakeRow = segment.x
-        snakeCol = segment.y
-        blocks[`${snakeRow}, ${snakeCol}`].classList.add("snake-block")
+    snake.forEach((segment, index) => {
+        const block = blocks[`${segment.x}, ${segment.y}`]
+
+        block.classList.add("snake-block")
+
+        if (index === 0) {
+            block.classList.add("snake-head-block")
+
+            block.style.transform =
+                direction === "ArrowUp" ? "rotate(180deg)" :
+                direction === "ArrowDown" ? "rotate(0deg)" :
+                direction === "ArrowLeft" ? "rotate(90deg)" :
+                "rotate(270deg)"
+        }
     })
 }
 
 function gameOverSnakeColor() {
     snake.forEach((segment) => {
-        let snakeRow = segment.x
-        let snakeCol = segment.y
-        blocks[`${snakeRow}, ${snakeCol}`].classList.add("dead-snake")
+        blocks[`${segment.x}, ${segment.y}`].classList.add("dead-snake")
     })
     clearInterval(renderInterval)
     gameOverOverlay.classList.add("game-over-overlay-display")
@@ -165,7 +171,8 @@ function renderGame(check=1) {
     // All clear
     else {
         snake.forEach(segment => {
-            blocks[`${segment.x}, ${segment.y}`].classList.remove("snake-block")
+            const block = blocks[`${segment.x}, ${segment.y}`]
+            block.classList.remove("snake-block", "snake-head-block")
         })
         
         snake.unshift(head)
@@ -226,8 +233,9 @@ function restartBtnEvent() {
     crrScoreDiv.innerHTML = score
     direction = "ArrowRight"
     snake.forEach(seg => {
-        blocks[`${seg.x}, ${seg.y}`].classList.remove("snake-block")
-        blocks[`${seg.x}, ${seg.y}`].classList.remove("dead-snake")
+        const block = blocks[`${seg.x}, ${seg.y}`]
+        block.classList.remove("snake-block", "dead-snake", "snake-head-block")
+        block.style.transform = ""
     })
     snake = [{x:3, y:3}, {x:3, y:4}, {x:3, y:5}]
     foodBlock.classList.remove("food-block")
@@ -244,13 +252,16 @@ startBtn.addEventListener("click", startBtnEvent)
 restartBtn.addEventListener("click", restartBtnEvent)
 
 window.addEventListener("resize", () => {
-    if (startOverlay.classList.contains("start-overlay-display")) {
+    if (!startOverlay.classList.contains("start-overlay-display") && gameOverOverlay.classList.remove("game-over-overlay-display")) {
+        clearInterval(renderInterval)
         renderBlocks()
         renderFood()
         renderSnake()
+        resetGameInterval()
     } else {
         renderBlocks()
         renderFood()
+        renderSnake()
     }
 })
 
@@ -286,5 +297,17 @@ document.addEventListener("keydown", (e) => {
         } else if (gameOverOverlay.classList.contains("game-over-overlay-display")) {
             restartBtnEvent()
         }
+    }
+})
+
+// Developer Option
+const stopBtn = document.querySelector("#stop")
+stopBtn.addEventListener("click", () => {
+    if (stopBtn.innerHTML === "Stop") {
+        clearInterval(renderInterval)
+        stopBtn.innerHTML = "Start"
+    } else {
+        renderInterval = setInterval(renderGame, intervalSpeed)
+        stopBtn.innerHTML = "Stop"
     }
 })

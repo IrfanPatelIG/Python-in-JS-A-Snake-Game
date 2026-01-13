@@ -9,8 +9,10 @@
     --bg-primary-dark: #0d0d0d;
     
     --bg-fill-food-dark: #61ef33;
-    --bg-fill-snake-dark: #22dffb;
-    --bg-fill-dead-snake-dark: #c01111;
+    --snake-head-dark: url(assets/Dark-snake-head.png);
+    --bg-fill-snake-l-dark: #7a0000;
+    --bg-fill-snake-r-dark: #4d0000;
+    --bg-fill-dead-snake-dark: #ec2a2a;
     
     --text-primary-dark: #eeeeee;
     --text-accent-color-dark: #011e22d5;
@@ -22,9 +24,11 @@
     
     /* Light Mode */
     --bg-primary-light: #e3e3e3;
-
+    
     --bg-fill-food-light: #cf1919;
-    --bg-fill-snake-light: #176830;
+    --snake-head-light: url(assets/Light-snake-head.png);
+    --bg-fill-snake-l-light: #004d00;
+    --bg-fill-snake-r-light: #003300;
     --bg-fill-dead-snake-light: #7c1515;
     
     --text-primary-light: #090909;
@@ -51,16 +55,18 @@ body {
     --bg-primary: var(--bg-primary-dark);
 
     --bg-fill-food: var(--bg-fill-food-dark);
-    --bg-fill-snake: var(--bg-fill-snake-dark);
+    --snake-head: var(--snake-head-dark);
+    --bg-fill-snake-l: var(--bg-fill-snake-l-dark);
+    --bg-fill-snake-r: var(--bg-fill-snake-r-dark);
     --bg-fill-dead-snake: var(--bg-fill-dead-snake-dark);
-
+    
     --text-primary: var(--text-primary-dark);
     --text-accent-color: var(--text-accent-color-dark);
     --text-accent-red-color: var(--text-accent-red-color-dark);
-
+    
     --br-primary-color: var(--br-primary-color-dark);
     --br-dead-color: var(--br-dead-color-dark);
-
+    
     width: 100vw;
     height: 100vh;
     color: var(--text-primary);
@@ -72,9 +78,11 @@ body {
 
 body.light-mode {
     --bg-primary: var(--bg-primary-light);
-
+    
     --bg-fill-food: var(--bg-fill-food-light);
-    --bg-fill-snake: var(--bg-fill-snake-light);
+    --snake-head: var(--snake-head-light);
+    --bg-fill-snake-l: var(--bg-fill-snake-l-light);
+    --bg-fill-snake-r: var(--bg-fill-snake-r-light);
     --bg-fill-dead-snake: var(--bg-fill-dead-snake-light);
 
     --text-primary: var(--text-primary-light);
@@ -139,6 +147,7 @@ header.game-info {
     width: 50%;
     display: flex;
     justify-content: center;
+    gap: 12px;
 }
 .mode-switch > .btn.light-mode {
     background-color: var(--bg-primary);
@@ -181,14 +190,17 @@ header.game-info {
 }
 
 .snake-block {
-    background-color: var(--bg-fill-snake);
+    border-radius: 4px;
+    background: linear-gradient(145deg, var(--bg-fill-snake-l), var(--bg-fill-snake-r));
 }
 
 .snake-head-block {
-    background-image: url("assets/SnakeHead.png");
-    background-size: cover;
+    background-image: var(--snake-head);
+    background-size: 90%;
     background-position: center;
     background-repeat: no-repeat;
+    transform-origin: center;
+    border-radius: 15px;
 }
 
 .dead-snake {
