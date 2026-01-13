@@ -1,2 +1,5 @@
 # Python-in-JS-A-Snake-Game
 A simple Snake and Food Game, built with HTML, CSS, and JS with features like High-Score, Random Food spawning, A Snake that grows as it eats food, and Game Over if the Snake hits the boundary. It is a Fully Responsive Website that gives a consistent UI on multiple devices
+
+## Demo Screenshot
+<img src="Demo ss light-theme.png" alt="Snake Game" width="800">
