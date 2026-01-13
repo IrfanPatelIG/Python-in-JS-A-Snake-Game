@@ -15,6 +15,7 @@ let snake = [
     {x:3, y:3}, {x:3, y:4}, {x:3, y:5}
 ]
 
+let intervalSpeed = 250
 let direction = "ArrowRight"
 let foodBlock = {x:3, y:7}
 let score = 0, highScore = 0
@@ -169,6 +170,13 @@ function renderGame(check=1) {
 
         if (head.x == food.x && head.y == food.y) {
             score += 10
+            if (score % 50 === 0 && intervalSpeed > 80) {
+                intervalSpeed -= 20
+                console.log("Interval speed chnaged to", intervalSpeed, " and score", score)
+            }
+            else if (score > 800) {
+                intervalSpeed = 40
+            }
             crrScoreDiv.innerHTML = score
             if (score > highScore) {
                 highScoreDiv.innerHTML = score
@@ -198,7 +206,7 @@ function startBtnEvent() {
     clearInterval(renderInterval)
     renderInterval = setInterval(() => {
         renderGame()
-    }, 300);
+    }, intervalSpeed);
 }
 
 function restartBtnEvent() {
@@ -220,7 +228,7 @@ function restartBtnEvent() {
     clearInterval(renderInterval)
     renderInterval = setInterval(() => {
         renderGame()
-    }, 300);
+    }, intervalSpeed);
 }
 
 startBtn.addEventListener("click", startBtnEvent)
