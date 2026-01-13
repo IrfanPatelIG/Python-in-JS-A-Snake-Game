@@ -77,6 +77,11 @@ function gameOverSnakeColor() {
     gameOverOverlay.classList.add("game-over-overlay-display")
 }
 
+function resetGameInterval() {
+    clearInterval(renderInterval)
+    renderInterval = setInterval(renderGame, intervalSpeed)
+}
+
 function initializeGame() {
     renderBlocks()
     renderSnake()
@@ -139,7 +144,6 @@ function renderGame(check=1) {
         if (score > highScore) {
             localStorage.setItem("HighScore", score)
         }
-        score = 0
         console.log("Game Over")
         gameOverMsg = "You Tried to Cross the Game Border!"
         gameOverMsgDiv.innerHTML = gameOverMsg
@@ -152,7 +156,6 @@ function renderGame(check=1) {
             localStorage.setItem("HighScore", score)
         }
         snakeBodyTouch = false
-        score = 0
         console.log("Game Over")
         gameOverMsgDiv.innerHTML = gameOverMsg
         gameOverSnakeColor()
@@ -172,10 +175,13 @@ function renderGame(check=1) {
             score += 10
             if (score % 50 === 0 && intervalSpeed > 80) {
                 intervalSpeed -= 20
-                console.log("Interval speed chnaged to", intervalSpeed, " and score", score)
+                console.log("Snake's speed chnaged to", intervalSpeed, " and the score is", score)
+                resetGameInterval()
             }
-            else if (score > 800) {
+            else if (score >= 600) {
                 intervalSpeed = 40
+                console.log("Snake's speed chnaged to", intervalSpeed, " and the score is", score)
+                resetGameInterval()
             }
             crrScoreDiv.innerHTML = score
             if (score > highScore) {
@@ -210,6 +216,8 @@ function startBtnEvent() {
 }
 
 function restartBtnEvent() {
+    intervalSpeed = 250
+    score = 0
     if (localStorage.getItem("HighScore")) {
         highScore = localStorage.getItem("HighScore")
     }
@@ -236,8 +244,14 @@ startBtn.addEventListener("click", startBtnEvent)
 restartBtn.addEventListener("click", restartBtnEvent)
 
 window.addEventListener("resize", () => {
-    renderBlocks()
-    renderFood()
+    if (startOverlay.classList.contains("start-overlay-display")) {
+        renderBlocks()
+        renderFood()
+        renderSnake()
+    } else {
+        renderBlocks()
+        renderFood()
+    }
 })
 
 modeSwitchBtn.addEventListener("click", () => {
