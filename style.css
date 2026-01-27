@@ -139,7 +139,6 @@ body.light-mode {
 header.game-info {
     width: 100%;
     justify-content: space-between;
-    /* flex-direction: column-reverse; */
     align-items: flex-end;
 }
 
@@ -253,4 +252,38 @@ header.game-info {
     margin-top: 6px;
     font-size: large;
     text-shadow: 1px 1px 2px var(--text-accent-color);
+}
+
+/* Media Queries */
+@media (width <= 600px) {
+    .game-info {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 20px;
+    }
+
+    .game-score {
+        justify-content: space-between !important;
+    }
+
+    .mode-switch {
+        width: fit-content;
+    }
+}
+
+@media (width <= 416px) {
+    .game-info {
+        flex-direction: column-reverse;
+        align-items: flex-start !important;
+    }
+
+    .game-score {
+        flex-direction: column;
+        justify-content: space-between !important;
+        align-items: flex-start;
+    }
+
+    .mode-switch {
+        width: fit-content;
+    }
 }

@@ -106,7 +106,7 @@ function initializeGame() {
 initializeGame()
 
 function renderGame(check=1) {
-    if (check != 1) return
+    if (check == 1) return
     let head = null
 
     if (direction === "ArrowRight") {
@@ -218,7 +218,7 @@ function startBtnEvent() {
     startOverlay.classList.remove("start-overlay-display")
     clearInterval(renderInterval)
     renderInterval = setInterval(() => {
-        renderGame()
+        renderGame(1)
     }, intervalSpeed);
 }
 
