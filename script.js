@@ -218,7 +218,7 @@ function startBtnEvent() {
     startOverlay.classList.remove("start-overlay-display")
     clearInterval(renderInterval)
     renderInterval = setInterval(() => {
-        renderGame(1)
+        renderGame()
     }, intervalSpeed);
 }
 
